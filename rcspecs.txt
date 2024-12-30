@@ -1,0 +1,11 @@
+#para o rcsp1
+100 955 1 #(número de vertices, número de arcos, número de cada tipo de recurso)
+0 # Limite inferior do número de recursos
+73 # Limite superior do número de recursos
+# Quantidade de recurso consumida passando pelo vertice i em cada tipo de recurso
+0
+...
+0
+#
+ 1 37 60 5  # (Vértice do começo do arco: 1, Vértice do final do arco: 37, Custo do arco: 60,
+            #A quantidade de cada recurso K gasto percorrendo cada arco: 5)
