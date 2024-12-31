@@ -24,7 +24,7 @@ def readProblem(fileNum: int = 1):
 
     for i in range(numVertices):
         vetResourcesByVertices.append(int(file.readline()))
-
+        dictVert[i + 1] = []
 
     for j in range(numArcos):
 
@@ -32,8 +32,8 @@ def readProblem(fileNum: int = 1):
 
         vertexI = int(aux[0])
 
-        if(vertexI not in dictVert):
-            dictVert[vertexI] = []
+        # if(vertexI not in dictVert):
+        #     dictVert[vertexI] = []
 
         aux2 = []
         for k in range(1, len(aux)):
@@ -43,8 +43,8 @@ def readProblem(fileNum: int = 1):
 
 
     file.close()
-
+    print(dictVert)
     return numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert
 
-
-readProblem(1)
+if __name__ == '__main__':
+    readProblem(3)

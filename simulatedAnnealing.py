@@ -6,8 +6,8 @@ from random import randint
 
 def embaralha(vO,dictVert, upperBound):
     tamVO = len(vO)
+    #print(vO)
     voltar = randint(1,tamVO-1) #o quão atrás nas escolhas vai querer voltar atrás
-
 
     currVert = vO[voltar-1] #pega o valor na posição ''voltar''
     vA = vO[:voltar] #pega os ''voltar'' primeiros valores
@@ -21,8 +21,8 @@ def embaralha(vO,dictVert, upperBound):
 
     tries = 0
 
-    recursosAcumulados = 0
-    custoAcumulado = 0
+    recursosAcumulados = funcRecurso(vA, dictVert)
+    custoAcumulado = funcCusto(vA, dictVert)
     # while goalNotAchieved:
     while (goalNotAchieved and notFailed and tries<1000):
         tempVertsAtEnd = []
@@ -61,7 +61,6 @@ def embaralha(vO,dictVert, upperBound):
                 notFailed = False
                 break
 
-
         if len(tempVertsAtEnd)>0:
             vA.append(tempVertsAtEnd[indexOfLowestCost])
             recursosAcumulados += tempRecursosGastos[indexOfLowestCost]
@@ -70,15 +69,18 @@ def embaralha(vO,dictVert, upperBound):
         else:
             notFailed = False
 
-        if currVert == goal:
-            goalNotAchieved = False  # alcancei o vértice alvo
-
         if notFailed == False:
             currVert = vO[voltar-1]
             vA = vO[:voltar]
-            recursosAcumulados = 0
-            custoAcumulado = 0
+            #print(vA)
+            recursosAcumulados = funcRecurso(vA, dictVert)
+            custoAcumulado = funcCusto(vA, dictVert)
             notFailed = True
+         #   print('aqui')
+        elif currVert == goal:
+            goalNotAchieved = False  # alcancei o vértice alvo
+
+
 
     #
 
@@ -86,6 +88,8 @@ def embaralha(vO,dictVert, upperBound):
         #print('tries')
         vA = vO
 
+
+    #print(vA)
     return vA
 
 def generateRandomNeighbor(s,dictVert,upperBound):
@@ -146,11 +150,13 @@ def simulAnnealing(s, to, SAmax, dictVert,upperBound):
         while iterT< SAmax:
             iterT += 1
             #TODO gerar um vizinho aleatório s' pertence a Vizinhança de s
+
             sLinha = generateRandomNeighbor(s,dictVert,upperBound)
+            #print('s', sLinha)
             delta = funcCusto(sLinha, dictVert) - funcCusto(s, dictVert)
             if (delta <0):
                 s = sLinha
-                if(funcCusto(s, dictVert) < funcCusto(solOtima, dictVert)): #Se o novo s for menor do que a atual solução ótima
+                if(funcCusto(sLinha, dictVert) < funcCusto(solOtima, dictVert)): #Se o novo s for menor do que a atual solução ótima
                     solOtima = sLinha
             else:
                 x = 0.5
@@ -163,9 +169,12 @@ def simulAnnealing(s, to, SAmax, dictVert,upperBound):
 
 
 def main():
-    numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert = readProblem(1)
+    numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert = readProblem(3)
     visited, custoAcumulado, recursosAcumulados = randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, vetResourcesByVertices, dictVert)
     melhorSolEncontrada = simulAnnealing(visited, 1, 1000, dictVert,upperBound)
     print('Melhor Solução Encontrada pelo Simulated Annealing:',melhorSolEncontrada)
+    print('Custo Melhor Solucao Encontrada:', funcCusto(melhorSolEncontrada, dictVert))
+    print('Recursos Gastos Melhor Solucao Encontrada:', funcRecurso(melhorSolEncontrada, dictVert))
+
 if __name__ == '__main__':
     main()

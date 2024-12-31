@@ -63,12 +63,6 @@ def randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, v
         else:
             notFailed = False
 
-        if currVert == goal:
-            print('Caminho Bem Sucedido:',visited)
-            print('Recursos Gastos no Total:', recursosAcumulados)
-            print('Custo Total:', custoAcumulado)
-            print('Tentativas:',tries)
-            goalNotAchieved = False #alcancei o vértice alvo
 
         if notFailed == False:
             currVert = 1
@@ -76,10 +70,16 @@ def randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, v
             recursosAcumulados = 0
             custoAcumulado = 0
             notFailed = True
+        elif currVert == goal:
+            print('Caminho Bem Sucedido:',visited)
+            print('Recursos Gastos no Total:', recursosAcumulados)
+            print('Custo Total:', custoAcumulado)
+            print('Tentativas:',tries)
+            goalNotAchieved = False #alcancei o vértice alvo
 
 
     return visited, custoAcumulado, recursosAcumulados
 
 if __name__ == '__main__':
-    numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert = readProblem(1)
+    numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert = readProblem(3)
     randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, vetResourcesByVertices, dictVert)
