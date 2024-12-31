@@ -36,7 +36,7 @@ def randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, v
 
 
         for i in range(len(tempVertsAtEnd)):
-            if((tempRecursosGastos[i] + recursosAcumulados) < upperBound) and (tempVertsAtEnd[i] == numVertices): #achou o último vértice pegou
+            if((tempRecursosGastos[i] + recursosAcumulados) < upperBound) and (tempVertsAtEnd[i] == goal): #achou o último vértice pegou
                 indexOfLowestCost = i
                 break
             elif((tempCosts[i] + tempRecursosGastos[i])/2 < (tempCosts[indexOfLowestCost] + tempRecursosGastos[indexOfLowestCost])/2 and ((tempRecursosGastos[i] + recursosAcumulados) < upperBound)):
@@ -47,24 +47,27 @@ def randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, v
                     break   #Se não fizer isso, a probabilidade fica tão baixa que sempre o próximo sobrescreve
             else:
                 tries += 1
-                print(tempCosts[i])
-                print(tempCosts[indexOfLowestCost])
-                print(recursosAcumulados)
-                print(upperBound)
-                print('Caminho falho, não encontrei seguindo por:', visited)
+                # print(tempCosts[i])
+                # print(tempCosts[indexOfLowestCost])
+                # print(recursosAcumulados)
+                # print(upperBound)
+                # print('Caminho falho, não encontrei seguindo por:', visited)
                 notFailed = False
                 break
+        if len(tempVertsAtEnd) > 0:
+            visited.append(tempVertsAtEnd[indexOfLowestCost])
+            recursosAcumulados += tempRecursosGastos[indexOfLowestCost]
+            custoAcumulado += tempCosts[indexOfLowestCost]
 
-        visited.append(tempVertsAtEnd[indexOfLowestCost])
-        recursosAcumulados += tempRecursosGastos[indexOfLowestCost]
-        custoAcumulado += tempCosts[indexOfLowestCost]
-
-        currVert = tempVertsAtEnd[indexOfLowestCost]
-
+            currVert = tempVertsAtEnd[indexOfLowestCost]
+        else:
+            notFailed = False
 
         if currVert == goal:
             print('Caminho Bem Sucedido:',visited)
-            print(tries)
+            print('Recursos Gastos no Total:', recursosAcumulados)
+            print('Custo Total:', custoAcumulado)
+            print('Tentativas:',tries)
             goalNotAchieved = False #alcancei o vértice alvo
 
         if notFailed == False:
@@ -77,5 +80,6 @@ def randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, v
 
     return visited, custoAcumulado, recursosAcumulados
 
-numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert = readProblem(1)
-randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, vetResourcesByVertices, dictVert)
+if __name__ == '__main__':
+    numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert = readProblem(1)
+    randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, vetResourcesByVertices, dictVert)
