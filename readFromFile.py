@@ -43,7 +43,7 @@ def readProblem(fileNum: int = 1):
 
 
     file.close()
-    print(dictVert)
+    #print(dictVert)
     return numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert
 
 if __name__ == '__main__':
