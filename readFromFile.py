@@ -35,9 +35,11 @@ def readProblem(fileNum: int = 1):
         if(vertexI not in dictVert):
             dictVert[vertexI] = []
 
-        dictVert[vertexI].append(aux[1:])
-
-    print(dictVert[1])
+        aux2 = []
+        for k in range(1, len(aux)):
+            aux2.append(int(aux[k]) )
+        dictVert[vertexI].append(aux2)
+  #  print(dictVert[1])
 
 
     file.close()
