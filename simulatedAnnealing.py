@@ -4,6 +4,29 @@ from randomFunction import randomSolution
 from random import randint
 
 
+def temperaturaInicial(beta, gama, SAmax, to, s,dictVert,upperBound):
+    t = to
+    continua = True
+    while continua:
+        aceitos = 0
+        for i in range(SAmax):
+            sLinha = generateRandomNeighbor(s, dictVert, upperBound)
+            delta = funcCusto(sLinha, dictVert) - funcCusto(s, dictVert)
+            if delta<0:
+                aceitos += 1
+            else:
+                x = 0.5
+                if x < exp((-delta / t)):
+                    aceitos +=1
+        if aceitos >= gama*SAmax:
+            continua = False
+        else:
+            t = beta * t
+
+    return t
+
+
+
 def embaralha(vO,dictVert, upperBound):
     tamVO = len(vO)
     #print(vO)
@@ -78,17 +101,24 @@ def embaralha(vO,dictVert, upperBound):
             notFailed = True
          #   print('aqui')
         elif currVert == goal:
+            # if 100 not in vA:
+            #     print(vO)
+            #     print(vA)
             goalNotAchieved = False  # alcancei o vértice alvo
-
-
+        # print('Failed:',notFailed)
+        # print('Goal Not Achieved',goalNotAchieved)
+        # print('Tries:', tries)
 
     #
 
-    if tries > 1000:
+    if tries >= 1000:
         #print('tries')
         vA = vO
-
-
+    if vO[-1] not in vA:
+        print(vO)
+        print(vA)
+        print('Algo deu errado na execução do código')
+        exit(1)
     #print(vA)
     return vA
 
@@ -96,7 +126,6 @@ def generateRandomNeighbor(s,dictVert,upperBound):
     vizinhancaOriginal = s
 
     vizinhancaAleatoria = embaralha(vizinhancaOriginal,dictVert,upperBound)
-
 
     return vizinhancaAleatoria
 
@@ -141,12 +170,11 @@ def funcCusto(solu, dictVert): #preciso do dictVert para obter meu custo
 
     return custo
 
-def simulAnnealing(s, to, SAmax, dictVert,upperBound):
+def simulAnnealing(s, to, SAmax, dictVert,upperBound, alfa):
     solOtima = s
     iterT = 0
     t = to
-    alfa = 0.9
-    while t >0.1:
+    while t >0.001:
         while iterT< SAmax:
             iterT += 1
             #TODO gerar um vizinho aleatório s' pertence a Vizinhança de s
@@ -168,13 +196,16 @@ def simulAnnealing(s, to, SAmax, dictVert,upperBound):
     return s
 
 
-def main():
-    numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert = readProblem(3)
+def main(SAmax, alfa, beta, gama,pE):
+    numVertices,numArcos, numRecursos,lowerBound, upperBound,vetResourcesByVertices, dictVert = readProblem(pE)
     visited, custoAcumulado, recursosAcumulados = randomSolution(numVertices, numArcos, numRecursos, lowerBound, upperBound, vetResourcesByVertices, dictVert)
-    melhorSolEncontrada = simulAnnealing(visited, 1, 1000, dictVert,upperBound)
+    to = temperaturaInicial(beta, gama,SAmax, 1,visited, dictVert, upperBound)
+    print('Temperatura Inicial: ',to)
+    melhorSolEncontrada = simulAnnealing(visited, to, SAmax, dictVert,upperBound, alfa)
     print('Melhor Solução Encontrada pelo Simulated Annealing:',melhorSolEncontrada)
     print('Custo Melhor Solucao Encontrada:', funcCusto(melhorSolEncontrada, dictVert))
     print('Recursos Gastos Melhor Solucao Encontrada:', funcRecurso(melhorSolEncontrada, dictVert))
 
 if __name__ == '__main__':
-    main()
+    problemaEscolhido = 1
+    main(SAmax=1000,alfa=0.9, beta=2,gama=0.95, pE=problemaEscolhido)
