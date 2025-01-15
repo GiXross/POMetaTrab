@@ -223,7 +223,7 @@ def main(alfa, beta, gama,pE):
 if __name__ == '__main__':
     problemaEscolhido = 2
 
-    main(alfa=0.99, beta=2, gama=0.95, pE=problemaEscolhido)
+    main(alfa=0.90, beta=2, gama=0.95, pE=problemaEscolhido)
 
 
 
